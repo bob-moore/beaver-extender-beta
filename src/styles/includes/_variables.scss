@@ -1,0 +1,12 @@
+$breakpoints: (
+    xs : 481px,
+    sm : 641px,
+    md : 769px,
+    lg : 961px,
+    xl : 1201px,
+    hd : 1441px,
+) !default;
+
+$gutter : .809rem;
+
+$grid-columns : 12;

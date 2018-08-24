@@ -1,0 +1,139 @@
+ @mixin grid( $size ) {
+     [class^="col-#{$size}"] {
+        float : left;
+        &.end { float: right; }
+     }
+
+    @for $i from 0 through $grid-columns {
+        .col-#{$size}-#{$i} {
+            width: percentage( $i / $grid-columns );
+        }
+        .col-#{$size}-push-#{$i} {
+            position: relative;
+            left: percentage( $i / $grid-columns );
+            right: auto;
+        }
+        .col-#{$size}-pull-#{$i} {
+            position: relative;
+            right: percentage( $i / $grid-columns);
+            left: auto;
+        }
+        .col-#{$size}-offset-#{$i} {
+            margin-left: percentage( $i / $grid-columns );
+        }
+    }
+    [class^="col-"] {
+		&.#{$size}-reset-order {
+		    float: left;
+		    left: auto;
+		    right: auto;
+		    margin-left: 0;
+		    margin-right: 0;
+		}
+		&.#{$size}-centered {
+		    margin-left: auto;
+		    margin-right: auto;
+		    float: none;
+		}
+		&.#{$size}-uncentered {
+		    float: left;
+		    margin-left: 0;
+		    margin-right: 0;
+		}
+		&.#{$size}-end { float: left; } // keeps last child from getting float: right
+		&.#{$size}-centered:last-child { float: none; } // keep last-child from getting float: right
+		&.#{$size}-uncentered:last-child { float: left; } // keep last-child from getting float: right
+		&.#{$size}-uncentered.opposite { float: right; }
+		.row-container, .grid-container {
+		    &.#{$size}-collapse > .column {
+		        padding-right: 0;
+		        padding-left: 0;
+		    }
+		    &.#{$size}-collapse .row {
+		        margin-left: 0;
+		        margin-right: 0;
+		    }
+		    &.#{$size}-uncollapse > .column {
+		        padding-right: $gutter;
+		        padding-left: $gutter;
+		    }
+		}
+    }
+}
+
+
+
+.row,
+.grid {
+    margin: 0;
+    margin-left: 0 - $gutter;
+    margin-right: 0 - $gutter;
+    padding: 0;
+    box-sizing: border-box;
+    @include clearfix;
+    &.collapse > [class^="col-"],
+    &.collapse .fl-col {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    &.collapse > .uncollapse {
+        padding-right: $gutter;
+        padding-left: $gutter;
+    }
+    &.inline {
+        > [class^="col-"] {
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+}
+
+ // Some flexbox stuff
+.row, .grid {
+    &.flexwrap, &.flexrow {
+        @include flexbox( 'row' );
+        &:before, &:after {
+            content: initial;
+        }
+        &.centered {
+            justify-content: center;
+        }
+    }
+    &.flexwrap {
+        flex-wrap: wrap;
+    }
+    .flexcol {
+    	@include flexbox();
+    	> div, .flex-container {
+    		display: block;
+    		flex: 1;
+    	}
+    }
+}
+ // Remove margin for grid
+.grid {
+    margin: 0;
+}
+
+[class^="col-"] {
+    padding-right: $gutter;
+    padding-left: $gutter;
+    display: block;
+    width: 100%;
+    float: none;
+    box-sizing: border-box;
+    &.collapse {
+        padding-right: 0;
+        padding-left: 0;
+    }
+} // end .column
+
+// Base Grid
+@include grid( 'base' );
+
+// Iterate over our breakpoint map to create the grid
+@each $breakpoint, $size in $breakpoints {
+    @include breakpoint( $breakpoint ) {
+        @include grid( $breakpoint );
+    }
+}

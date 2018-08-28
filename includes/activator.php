@@ -33,7 +33,7 @@ class Activator {
 	 */
 	public static function turn_on_contentblocks() {
 
-		$activated_post_types = get_option( '_fl_builder_post_types', array() );
+		$activated_post_types = get_option( '_fl_builder_post_types', array( 'page' ) );
 
 		if( array_search( 'contentblock', $activated_post_types ) === false && get_option( '_beaver_extender_active', false ) !== '1' ) {
 			// Append our post type
